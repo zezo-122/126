@@ -311,6 +311,32 @@ db.ref('orders').on('child_changed', snap => {
         }
     }
 </script>
+<script>    // إرسال طلب الدليفري بسعر ثابت 20 جنيه
+    document.getElementById('formTalab').onsubmit = (e) => {
+        e.preventDefault();
+        
+        // البيانات المرسلة لقاعدة البيانات
+        const orderData = {
+            serviceType: "طلب دليفري", 
+            customerPhone: userPhone,
+            from: "من المحلات/السوبر ماركت", 
+            to: document.getElementById('userAddress').value,
+            packageDescription: document.getElementById('userOrder').value,
+            price: "20", // السعر ثابت هنا
+            status: "waiting", 
+            timestamp: Date.now()
+        };
 
+        db.ref('orders').push(orderData)
+        .then(() => {
+            alert("تم إرسال طلبك بنجاح! تكلفة التوصيل: 20 جنيه ✅"); 
+            e.target.reset(); // تفريغ الخانات
+            showSection('history'); // الانتقال لصفحة طلباتي لرؤية الطلب
+        })
+        .catch((error) => {
+            alert("عذراً، حدث خطأ: " + error.message);
+        });
+    };
+</script>
 </body>
 </html>
